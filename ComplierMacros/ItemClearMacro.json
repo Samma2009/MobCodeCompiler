@@ -1,0 +1,5 @@
+{
+    "evaluator":"Item.Clear",
+    "arguments": ["selector","item","count"],
+    "result": "clear %selector% %item% %count%"
+}

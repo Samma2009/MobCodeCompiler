@@ -1,0 +1,5 @@
+{
+    "evaluator":"Player.Damage",
+    "arguments": ["selector","damage","type"],
+    "result": "damage %selector% %damage% %type%" 
+}

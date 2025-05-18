@@ -1,0 +1,5 @@
+{
+    "evaluator":"Item.Give",
+    "arguments": ["selector","type","quantity","components"],
+    "result": "give %selector% %type%%components% %quantity%"
+}

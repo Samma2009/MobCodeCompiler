@@ -1,0 +1,5 @@
+{
+    "evaluator": "Player.Gamemode",
+    "arguments": ["target", "gamemode"],
+    "result": "gamemode %gamemode% %target%"
+}

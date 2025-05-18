@@ -1,0 +1,5 @@
+{
+    "evaluator":"Dialog.Clear",
+    "arguments": ["selector"],
+    "result": "dialog clear %selector%"
+}

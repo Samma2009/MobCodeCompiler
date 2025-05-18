@@ -1,0 +1,5 @@
+{
+    "evaluator":"Dialog.Show",
+    "arguments": ["selector","dialog"],
+    "result": "dialog show %selector% %dialog%"
+}

@@ -1,0 +1,5 @@
+{
+    "evaluator": "Entity.Teleport",
+    "arguments": ["target", "destination"],
+    "result": "tp %target% %destination%"
+}
