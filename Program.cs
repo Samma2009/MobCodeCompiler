@@ -30,7 +30,7 @@
             string c = "";
             foreach (var item in rc)
             {
-                var i = item.Trim();
+                var i = item.Trim()+" ";
                 if (i.Contains("//"))
                 {
                     var s = i.IndexOf("//");
@@ -43,9 +43,7 @@
                 }
                 c += i;
             }
-            //Console.WriteLine(c);
             var eltree = Parser.Parse(c);
-            //Console.WriteLine(eltree.Count);
             var entry = new DirEntry();
             entry.name = "data";
             FileTree.s.Add(entry);

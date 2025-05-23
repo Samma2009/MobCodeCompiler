@@ -52,13 +52,8 @@ namespace MobCode
                         }
                         else
                         {
-                            commandbuffer += kw + name +"{"+buffer+"}";
+                            commandbuffer += kw + name+ "{" + buffer + "}";
                         }
-                        //Console.WriteLine("Buffer: " + buffer);
-                        //Console.WriteLine("depth: " + depth);
-                        //Console.WriteLine("name: " + name);
-                        //Console.WriteLine("kw: " + kw);
-                        //Console.WriteLine();
 
                         kw = "";
                         name = "";
@@ -78,12 +73,6 @@ namespace MobCode
                         CommandElement elem = new(kw + name + buffer);
                         elements.Add(elem);
                     }
-                    
-                    //Console.WriteLine("Buffer: " + buffer);
-                    //Console.WriteLine("depth: " + depth);
-                    //Console.WriteLine("name: " + name);
-                    //Console.WriteLine("kw: " + kw);
-                    //Console.WriteLine();
 
                     kw = "";
                     name = "";
@@ -94,7 +83,7 @@ namespace MobCode
                 {
                     buffer += item;
                 }
-                else if (kw.Length > 0 && kw.EndsWith(" "))
+                else if (kw.Trim().Length > 0 && kw.EndsWith(" "))
                 {
                     name += item;
                 }

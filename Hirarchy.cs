@@ -36,7 +36,6 @@ namespace MobCode
 
             ((DirEntry)entry).data.Add(d);
 
-            //Console.WriteLine("namespace "+Name);
             foreach (var item in Children)
             {
                 item.Generate(d);
@@ -59,7 +58,6 @@ namespace MobCode
 
             ((DirEntry)entry).data.Add(d);
 
-            //Console.WriteLine("     class " + Name);
             foreach (var item in Children)
             {
                 item.Generate(d);
@@ -82,7 +80,6 @@ namespace MobCode
 
             ((DirEntry)entry).data.Add(d);
 
-            //Console.WriteLine("         function " + Name);
             foreach (var item in Children)
             {
                 item.Generate(d);
@@ -111,7 +108,6 @@ namespace MobCode
                 Data = string.Join(" ",d);
             }
             fe.data += Macros.EvaluateMacro(Data) + "\n";
-            //Console.WriteLine("             "+Data);
         }
     }
 }
