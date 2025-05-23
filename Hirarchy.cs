@@ -80,6 +80,8 @@ namespace MobCode
 
             ((DirEntry)entry).data.Add(d);
 
+            Program.ComTimeVariables.Clear();
+
             foreach (var item in Children)
             {
                 item.Generate(d);
@@ -107,6 +109,22 @@ namespace MobCode
                 }
                 Data = string.Join(" ",d);
             }
+
+            if (Data.Trim().StartsWith("$"))
+            {
+                var parts = Data.Split("=");
+                if (parts.Length > 1 && !parts[0].Trim().Contains(" "))
+                {
+                    Program.ComTimeVariables[parts[0].Trim() + "$"] = Data.Substring(Data.IndexOf("=") + 1).Trim();
+                    return;
+                }
+            }
+
+            foreach (var item in Program.ComTimeVariables)
+            {
+                Data = Data.Replace(item.Key,item.Value);
+            }
+
             fe.data += Macros.EvaluateMacro(Data) + "\n";
         }
     }
