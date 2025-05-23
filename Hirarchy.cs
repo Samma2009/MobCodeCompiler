@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -89,9 +89,9 @@ namespace MobCode
     public class CommandElement : HirarchyElemet
     {
         string Data;
-        public CommandElement(string Data) : base()
+        public CommandElement(string data) : base()
         {
-            this.Data = Data;
+            this.Data = data;
         }
         public override void Generate(FTEntry entry)
         {
@@ -107,7 +107,9 @@ namespace MobCode
                 }
                 Data = string.Join(" ",d);
             }
-            fe.data += Macros.EvaluateMacro(Data) + "\n";
+
+            string processedData = Parser.SubstituteVariables(Data);
+            fe.data += Macros.EvaluateMacro(processedData) + "\n";
         }
     }
 }
