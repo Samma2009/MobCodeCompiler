@@ -1,19 +1,47 @@
-﻿namespace MobCode
+﻿using System.IO.Compression;
+using System.Net;
+
+namespace MobCode
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            if (args.Length != 1) return;
+            if (args.Length == 0) return;
 
             Macros.LoadMacros();
 
-            if (args[0] == "build")
-                Build();
-            else if (args[0] == "watch")
-                Watch();
-            else
-                Console.WriteLine("Invalid argument " + args[0]);
+            switch (args[0])
+            {
+                case "build": Build(); break;
+                case "watch": Watch(); break;
+                case "install": InstallMacros(args.Skip(1).ToArray()); break;
+                default:
+                    Console.WriteLine("Invalid argument " + args[0]);
+                    break;
+            }
+        }
+
+        static void InstallMacros(string[] urls)
+        {
+            foreach (var item in urls)
+            {
+                var client = new HttpClient();
+                var stream = client.GetStreamAsync(item).GetAwaiter().GetResult();
+                var zip = new ZipArchive(stream);
+                try
+                {
+                    zip.ExtractToDirectory(Path.Combine(AppContext.BaseDirectory, "ComplierMacros"));
+                    foreach (var file in zip.Entries)
+                    {
+                        Console.WriteLine("downloaded " + file.Name);
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    Console.WriteLine("failed to dowload from link " + item + " with error: "+ex.Message);
+                }
+            }
         }
 
         static void Build()
