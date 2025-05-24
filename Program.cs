@@ -5,7 +5,6 @@ namespace MobCode
 {
     internal class Program
     {
-        public static Dictionary<string, string> ComTimeVariables = new();
         static void Main(string[] args)
         {
             if (args.Length == 0) return;
