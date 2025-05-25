@@ -1,0 +1,5 @@
+{
+    "evaluator": "Bossbar.Create",
+    "arguments": ["id", "name"],
+    "result": "bossbar add %id% %name%"
+}

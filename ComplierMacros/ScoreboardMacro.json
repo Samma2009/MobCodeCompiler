@@ -1,0 +1,5 @@
+{
+    "evaluator": "Scoreboard.Define",
+    "arguments": ["name", "criteria"],
+    "result": "scoreboard objectives add %name% %criteria%"
+}

@@ -1,0 +1,5 @@
+{
+    "evaluator": "Storage.Set",
+    "arguments": ["storage", "path", "value"],
+    "result": "data modify storage %storage% %path% set value %value%"
+}

@@ -1,0 +1,5 @@
+{
+    "evaluator": "Entity.Tag",
+    "arguments": ["target", "operation", "tag"],
+    "result": "tag %target% %operation% %tag%"
+}

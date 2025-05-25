@@ -1,0 +1,5 @@
+{
+    "evaluator": "Team.Create",
+    "arguments": ["name", "displayName"],
+    "result": "team add %name% %displayName%"
+}

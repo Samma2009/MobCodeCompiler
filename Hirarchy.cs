@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NCalc;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
@@ -155,6 +156,12 @@ namespace MobCode
                 {
                     string varName = parts[0].Trim();
                     string value = Data.Substring(Data.IndexOf('=') + 1).Trim();
+
+                    try
+                    {
+                        value = new Expression(value).Evaluate().ToString();
+                    }
+                    catch (Exception){}
 
                     ComTimeVariables[varName + "$"] = value;
 
