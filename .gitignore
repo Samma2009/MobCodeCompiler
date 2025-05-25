@@ -1,3 +1,10 @@
 /obj
 /bin
 *.sln
+.vs/MobCodeCompiler/FileContentIndex/def03137-75b7-4bf9-87d9-9c30f1835ebd.vsidx
+.vs/MobCodeCompiler/CopilotIndices/17.12.53.23981/SemanticSymbols.db-wal
+.vs/MobCodeCompiler/CopilotIndices/17.12.53.23981/SemanticSymbols.db-shm
+.vs/MobCodeCompiler/CopilotIndices/17.12.53.23981/SemanticSymbols.db
+.vs/MobCodeCompiler/CopilotIndices/17.12.53.23981/CodeChunks.db-wal
+.vs/MobCodeCompiler/CopilotIndices/17.12.53.23981/CodeChunks.db-shm
+.vs/MobCodeCompiler/CopilotIndices/17.12.53.23981/CodeChunks.db
