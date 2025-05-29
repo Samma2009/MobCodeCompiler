@@ -50,9 +50,21 @@ namespace MobCode
                             elem.Children = Parse(buffer);
                             elements.Add(elem);
                         }
+                        else if (kw.Trim() == "if")
+                        {
+                            IfElement elem = new(name.Trim());
+                            elem.Children = Parse(buffer);
+                            elements.Add(elem);
+                        }
+                        else if (kw.Trim() == "times")
+                        {
+                            RepeatElement elem = new(name.Trim());
+                            elem.Children = Parse(buffer);
+                            elements.Add(elem);
+                        }
                         else
                         {
-                            commandbuffer += kw + name+ "{" + buffer + "}";
+                            commandbuffer += kw + name + "{" + buffer + "}";
                         }
 
                         kw = "";

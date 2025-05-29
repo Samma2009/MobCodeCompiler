@@ -78,7 +78,7 @@ namespace MobCode
             if (entry.GetType() != typeof(DirEntry)) return;
 
             var d = new FileEntry();
-            d.name = Name.ToLower().Replace(" ", "")  ;
+            d.name = Name.ToLower().Replace(" ", "");
 
             ((DirEntry)entry).data.Add(d);
 
@@ -90,13 +90,67 @@ namespace MobCode
             }
         }
     }
+    public class IfElement : HirarchyElemet
+    {
+        string Name;
+        public IfElement(string name) : base()
+        {
+            Name = name;
+        }
+        public override void Generate(FTEntry entry)
+        {
+            foreach (var item in CommandElement.ComTimeVariables)
+            {
+                Name = Name.Replace(item.Key, item.Value);
+            }
+
+            try
+            {
+                if (bool.Parse(new Expression(Name).Evaluate()!.ToString()!))
+                    foreach (var item in Children)
+                    {
+                        item.Generate(entry);
+                    }
+            }
+            catch (Exception) { }
+        }
+    }
+    public class RepeatElement : HirarchyElemet
+    {
+        string Name;
+        public RepeatElement(string name) : base()
+        {
+            Name = name;
+        }
+        public override void Generate(FTEntry entry)
+        {
+
+            foreach (var item in CommandElement.ComTimeVariables)
+            {
+                Name = Name.Replace(item.Key, item.Value);
+            }
+
+            try
+            {
+                int iter = int.Parse(new Expression(Name).Evaluate()!.ToString()!);
+                for (int i = 0; i < iter; i++)
+                {
+                    foreach (var item in Children)
+                    {
+                        item.Generate(entry);
+                    }
+                }
+            }
+            catch (Exception) { }
+        }
+    }
     public class CommandElement : HirarchyElemet
     {
         public static Dictionary<string, string> ComTimeVariables = new();
-        string Data;
+        string Datad;
         public CommandElement(string Data) : base()
         {
-            this.Data = Data;
+            this.Datad = Data;
         }
         static bool IsValidJson(string input)
         {
@@ -138,6 +192,7 @@ namespace MobCode
         {
             if (entry.GetType() != typeof(FileEntry)) return;
             var fe = ((FileEntry)entry);
+            string Data = Datad;
             bool newline = Data.Contains(@"\");
             if (newline)
             {
@@ -149,19 +204,25 @@ namespace MobCode
                 Data = string.Join(" ", d);
             }
 
+            foreach (var item in ComTimeVariables)
+            {
+                Data = Data.Replace(item.Key, item.Value);
+            }
+
             if (Data.Trim().StartsWith("$"))
             {
                 var parts = Data.Split('=');
                 if (parts.Length > 1 && !parts[0].Trim().Contains(" "))
                 {
                     string varName = parts[0].Trim();
+                    Data = Data.Trim();
                     string value = Data.Substring(Data.IndexOf('=') + 1).Trim();
 
                     try
                     {
-                        value = new Expression(value).Evaluate().ToString();
+                        value = new Expression(value).Evaluate()!.ToString()!;
                     }
-                    catch (Exception){}
+                    catch (Exception) { }
 
                     ComTimeVariables[varName + "$"] = value;
 
@@ -182,19 +243,13 @@ namespace MobCode
                                 {
                                     res += item.Trim();
                                 }
-                                ComTimeVariables[fullVarName+"$"] = res;
+                                ComTimeVariables[fullVarName + "$"] = res;
                             }
                         }
                     }
 
                     return;
                 }
-            }
-
-
-            foreach (var item in ComTimeVariables)
-            {
-                Data = Data.Replace(item.Key, item.Value);
             }
 
             fe.data += Macros.EvaluateMacro(Data) + "\n";
