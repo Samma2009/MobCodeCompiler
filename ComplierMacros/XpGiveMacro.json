@@ -1,0 +1,5 @@
+{
+    "evaluator": "Player.XpGive",
+    "arguments": ["target", "amount", "type"],
+    "result": "xp add %target% %amount% %type%"
+}

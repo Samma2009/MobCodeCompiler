@@ -1,0 +1,5 @@
+{
+    "evaluator": "World.Sound",
+    "arguments": ["sound", "location", "volume", "pitch", "minVolume"],
+    "result": "playsound %sound% %location% %volume% %pitch% %minVolume%"
+}

@@ -1,0 +1,5 @@
+{
+    "evaluator": "World.SetBlock",
+    "arguments": ["location", "block"],
+    "result": "setblock %location% %block%"
+}

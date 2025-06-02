@@ -105,6 +105,28 @@ namespace MobCode
                 }
             }
 
+            if (kw.Trim() != "")
+            {
+                Console.BackgroundColor = ConsoleColor.DarkYellow;
+                Console.ForegroundColor = ConsoleColor.Black;
+                Console.Write("Warning:");
+                Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine(" trailing data encountered \"" + kw + name + buffer + "\"");
+                Console.ResetColor();
+            }
+
+            if (depth > 0)
+            {
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.ForegroundColor = ConsoleColor.Black;
+                Console.Write("Error:");
+                Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(" missing \"}\"");
+                Console.ResetColor();
+            }
+
             return elements;
         }
     }

@@ -77,6 +77,17 @@ namespace MobCode
             FileTree.s.Add(entry);
             foreach (var item in eltree)
             {
+                if (item.Type != "NamespaceElement")
+                {
+                    Console.BackgroundColor = ConsoleColor.Red;
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.Write("Error:");
+                    Console.ResetColor();
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(" root element must be a namespace");
+                    Console.ResetColor();
+                    continue;
+                }
                 item.Generate(entry);
             }
             FDNavigate(entry, "");
@@ -105,8 +116,6 @@ namespace MobCode
             }
             return false; // still locked
         }
-
-
         static void Watch()
         {
             Build();

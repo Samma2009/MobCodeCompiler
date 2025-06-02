@@ -1,0 +1,5 @@
+{
+    "evaluator": "Entity.Kill",
+    "arguments": ["target"],
+    "result": "kill %target%"
+}

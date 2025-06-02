@@ -1,0 +1,5 @@
+{
+    "evaluator": "World.TimeSet",
+    "arguments": ["time"],
+    "result": "time set %time%"
+}

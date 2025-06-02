@@ -1,0 +1,5 @@
+{
+    "evaluator": "World.Weather",
+    "arguments": ["type", "duration"],
+    "result": "weather %type% %duration%"
+}

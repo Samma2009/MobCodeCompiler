@@ -1,0 +1,5 @@
+{
+    "evaluator": "Player.XpClear",
+    "arguments": ["target"],
+    "result": "xp set %target% 0"
+}
