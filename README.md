@@ -30,19 +30,19 @@ Run the compiler with the following commands:
 ### Build
 Compile all `.mc` files in the current directory:
 ```bash
-MobCodeCompiler.exe build
+MobCode.exe build
 ```
 
 ### Watch
 Automatically rebuild files when changes are detected:
 ```bash
-MobCodeCompiler.exe watch
+MobCode.exe watch
 ```
 
 ### Install Macros
 Download and install macros from a list of URLs:
 ```bash
-MobCodeCompiler.exe install <url1> <url2> ...
+MobCode.exe install <url1> <url2> ...
 ```
 
 ## Language Features
