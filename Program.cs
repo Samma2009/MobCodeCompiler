@@ -39,7 +39,7 @@ namespace MobCode
                 }
                 catch (System.Exception ex)
                 {
-                    Console.WriteLine("failed to dowload from link " + item + " with error: "+ex.Message);
+                    Console.WriteLine("failed to dowload from link " + item + " with error: " + ex.Message);
                 }
             }
         }
@@ -58,7 +58,7 @@ namespace MobCode
             string c = "";
             foreach (var item in rc)
             {
-                var i = item.Trim()+" ";
+                var i = item.Trim() + " ";
                 if (i.Contains("//"))
                 {
                     var s = i.IndexOf("//");
@@ -119,7 +119,7 @@ namespace MobCode
         static void Watch()
         {
             Build();
-            var w = new FileSystemWatcher(".","*.mc");
+            var w = new FileSystemWatcher(".", "*.mc");
             w.NotifyFilter = NotifyFilters.FileName
                            | NotifyFilters.LastWrite
                            | NotifyFilters.Size;
@@ -138,14 +138,14 @@ namespace MobCode
             };
 
             w.EnableRaisingEvents = true;
-            while (true);
+            while (true) ;
         }
 
-        static void FDNavigate(FTEntry entry,string composedpath)
+        static void FDNavigate(FTEntry entry, string composedpath)
         {
             if (entry.GetType() == typeof(DirEntry))
             {
-                Directory.CreateDirectory(composedpath+ entry.name+"/");
+                Directory.CreateDirectory(composedpath + entry.name + "/");
                 foreach (var item in ((DirEntry)entry).data)
                 {
                     FDNavigate(item, composedpath + entry.name + "/");
@@ -153,8 +153,28 @@ namespace MobCode
             }
             else
             {
-                File.WriteAllText(composedpath + entry.name+".mcfunction",((FileEntry)entry).data);
+                if (entry.modifiers.Contains("@load"))
+                {
+                    var p = ReplaceFirst(composedpath.Replace(@"data/", ""),'/',':').Replace(":function/",":");
+                    Directory.CreateDirectory("data/minecraft/tags/function");
+                    File.WriteAllText(@"data/minecraft/tags/function/load.json",$"{{\"values\": [\"{p+ entry.name}\"]}}");
+                }
+                if (entry.modifiers.Contains("@tick"))
+                {
+                    var p = ReplaceFirst(composedpath.Replace(@"data/", ""),'/',':').Replace(":function/",":");
+                    Directory.CreateDirectory("data/minecraft/tags/function");
+                    File.WriteAllText(@"data/minecraft/tags/function/tick.json",$"{{\"values\": [\"{p+ entry.name}\"]}}");
+                }
+                File.WriteAllText(composedpath + entry.name + ".mcfunction", ((FileEntry)entry).data);
             }
+        }
+
+        static string ReplaceFirst(string s, char replacer, char replacee)
+        {
+            var a = s.IndexOf(replacer);
+            var ns = s.ToCharArray();
+            ns[a] = replacee;
+            return new string(ns);
         }
     }
 }

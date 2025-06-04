@@ -13,6 +13,7 @@ namespace MobCode
             List<HirarchyElemet> elements = new List<HirarchyElemet>();
 
             int depth = 0;
+            List<string> modifiers = new() {};
             string kw = "";
             string name = "";
             string buffer = "";
@@ -32,57 +33,54 @@ namespace MobCode
 
                     if (depth == 0)
                     {
-                        if (kw.Trim() == "namespace")
+                        HirarchyElemet elem = null!;
+                        switch (kw.Trim())
                         {
-                            NamespaceElement elem = new(name.Trim());
+                            case "namespace":
+                                elem = new NamespaceElement(name.Trim());
+                                break;
+                            case "function":
+                                elem = new FunctionElement(name.Trim());
+                                break;
+                            case "class":
+                                elem = new ClassElement(name.Trim());
+                                break;
+                            case "if":
+                                elem = new IfElement(name.Trim());
+                                break;
+                            case "times":
+                                elem = new RepeatElement(name.Trim());
+                                break;
+                            default:
+                                commandbuffer += kw + name + "{" + buffer + "}";
+                                break;
+                        }
+                        if (elem != null)
+                        {
+                            elem.Modifiers = modifiers.ToArray();
                             elem.Children = Parse(buffer);
                             elements.Add(elem);
-                        }
-                        else if (kw.Trim() == "class")
-                        {
-                            ClassElement elem = new(name.Trim());
-                            elem.Children = Parse(buffer);
-                            elements.Add(elem);
-                        }
-                        else if (kw.Trim() == "function")
-                        {
-                            FunctionElement elem = new(name.Trim());
-                            elem.Children = Parse(buffer);
-                            elements.Add(elem);
-                        }
-                        else if (kw.Trim() == "if")
-                        {
-                            IfElement elem = new(name.Trim());
-                            elem.Children = Parse(buffer);
-                            elements.Add(elem);
-                        }
-                        else if (kw.Trim() == "times")
-                        {
-                            RepeatElement elem = new(name.Trim());
-                            elem.Children = Parse(buffer);
-                            elements.Add(elem);
-                        }
-                        else
-                        {
-                            commandbuffer += kw + name + "{" + buffer + "}";
                         }
 
                         kw = "";
                         name = "";
                         buffer = "";
                         depth = 0;
+                        modifiers.Clear();
                     }
                 }
                 else if (depth == 0 && item == ';')
                 {
                     if (commandbuffer != "")
                     {
-                        CommandElement elem = new(commandbuffer+kw + name);
+                        CommandElement elem = new(commandbuffer + kw + name);
+                        elem.Modifiers = modifiers.ToArray();
                         elements.Add(elem);
                     }
                     else
                     {
                         CommandElement elem = new(kw + name + buffer);
+                        elem.Modifiers = modifiers.ToArray();
                         elements.Add(elem);
                     }
 
@@ -90,6 +88,7 @@ namespace MobCode
                     name = "";
                     buffer = "";
                     commandbuffer = "";
+                    modifiers.Clear();
                 }
                 else if (depth > 0)
                 {
@@ -97,7 +96,13 @@ namespace MobCode
                 }
                 else if (kw.Trim().Length > 0 && kw.EndsWith(" "))
                 {
-                    name += item;
+                    if (kw.Trim().StartsWith("@"))
+                    {
+                        modifiers.Add(kw.Trim());
+                        kw = item.ToString();
+                    }
+                    else
+                        name += item;
                 }
                 else
                 {

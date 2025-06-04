@@ -14,6 +14,7 @@ namespace MobCode
     public abstract class FTEntry
     {
         public string name;
+        public string[] modifiers = [];
     }
 
     public class DirEntry : FTEntry

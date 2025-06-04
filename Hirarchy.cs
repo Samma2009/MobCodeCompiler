@@ -11,11 +11,13 @@ namespace MobCode
     public abstract class HirarchyElemet
     {
         public string Type;
+        public string[] Modifiers;
         public List<HirarchyElemet> Children;
 
         public HirarchyElemet()
         {
             Type = this.GetType().Name;
+            Modifiers = [];
             Children = new List<HirarchyElemet>();
         }
 
@@ -79,6 +81,7 @@ namespace MobCode
 
             var d = new FileEntry();
             d.name = Name.ToLower().Replace(" ", "");
+            d.modifiers = Modifiers;
 
             ((DirEntry)entry).data.Add(d);
 
@@ -191,7 +194,7 @@ namespace MobCode
         public override void Generate(FTEntry entry)
         {
             if (entry.GetType() != typeof(FileEntry)) return;
-            var fe = ((FileEntry)entry);
+            var fe = (FileEntry)entry;
             string Data = Datad;
             bool newline = Data.Contains(@"\");
             if (newline)
