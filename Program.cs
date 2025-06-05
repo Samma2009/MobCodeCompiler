@@ -165,7 +165,7 @@ namespace MobCode
                     Directory.CreateDirectory("data/minecraft/tags/function");
                     File.WriteAllText(@"data/minecraft/tags/function/tick.json",$"{{\"values\": [\"{p+ entry.name}\"]}}");
                 }
-                File.WriteAllText(composedpath + entry.name + ".mcfunction", ((FileEntry)entry).data);
+                File.WriteAllText(composedpath + entry.name + (entry as FileEntry)!.extension, ((FileEntry)entry).data);
             }
         }
 

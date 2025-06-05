@@ -25,5 +25,6 @@ namespace MobCode
     public class FileEntry : FTEntry
     {
         public string data;
+        public string extension;
     }
 }

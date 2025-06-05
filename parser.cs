@@ -42,6 +42,9 @@ namespace MobCode
                             case "function":
                                 elem = new FunctionElement(name.Trim());
                                 break;
+                            case "while":
+                                elem = new WhileElement(name.Trim());
+                                break;
                             case "class":
                                 elem = new ClassElement(name.Trim());
                                 break;

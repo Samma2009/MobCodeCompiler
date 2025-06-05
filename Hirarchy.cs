@@ -81,6 +81,7 @@ namespace MobCode
 
             var d = new FileEntry();
             d.name = Name.ToLower().Replace(" ", "");
+            d.extension = ".mcfunction";
             d.modifiers = Modifiers;
 
             ((DirEntry)entry).data.Add(d);
@@ -142,6 +143,51 @@ namespace MobCode
                     {
                         item.Generate(entry);
                     }
+                }
+            }
+            catch (Exception) { }
+        }
+    }
+    public class WhileElement : HirarchyElemet
+    {
+        string Name;
+        public WhileElement(string name) : base()
+        {
+            Name = name;
+        }
+        public override void Generate(FTEntry entry)
+        {
+            try
+            {
+                int breakout = 0;
+                var n = Name;
+                foreach (var item in CommandElement.ComTimeVariables)
+                {
+                    n = n.Replace(item.Key, item.Value);
+                }
+                while (bool.Parse(new Expression(n).Evaluate()!.ToString()!))
+                {
+                    if (breakout >= 50000)
+                    {
+                        Console.BackgroundColor = ConsoleColor.Red;
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        Console.Write("Error:");
+                        Console.ResetColor();
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine(" max iteration count reached (50000 iterations)");
+                        Console.ResetColor();
+                        return;
+                    }
+                    foreach (var item in Children)
+                    {
+                        item.Generate(entry);
+                    }
+                    n = Name;
+                    foreach (var item in CommandElement.ComTimeVariables)
+                    {
+                        n = n.Replace(item.Key, item.Value);
+                    }
+                    breakout++;
                 }
             }
             catch (Exception) { }
