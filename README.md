@@ -1,3 +1,4 @@
+![Discord](https://img.shields.io/discord/1380225285869404270?style=for-the-badge)
 # MobCode Compiler
 
 The **MobCode Compiler** is a tool designed to compile custom scripting language into Minecraft function files. It supports namespaces, classes, functions, and macros for efficient and modular scripting.
