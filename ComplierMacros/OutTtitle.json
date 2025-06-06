@@ -1,5 +1,5 @@
 {
     "evaluator":"Out.Title",
     "arguments": ["selector","type","text"],
-    "result": "Title %selector% %type% %text%"
+    "result": "title %selector% %type% %text%"
 }
