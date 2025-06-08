@@ -8,7 +8,7 @@ namespace MobCode
 {
     public static class Parser
     {
-        public static List<HirarchyElemet> Parse(string input) 
+        public static List<HirarchyElemet> Parse(string input,bool parsejsongens = true) 
         {
             List<HirarchyElemet> elements = new List<HirarchyElemet>();
 
@@ -55,13 +55,17 @@ namespace MobCode
                                 elem = new RepeatElement(name.Trim());
                                 break;
                             default:
-                                commandbuffer += kw + name + "{" + buffer + "}";
+                                if (parsejsongens)
+                                    elem = new JsonElement(name.Trim(),"{" + buffer + "}",kw.Trim());
+                                else
+                                    commandbuffer += kw + name + "{" + buffer + "}";
                                 break;
                         }
                         if (elem != null)
                         {
                             elem.Modifiers = modifiers.ToArray();
-                            elem.Children = Parse(buffer);
+                            if(elem.GetType() != typeof(JsonElement))
+                                elem.Children = Parse(buffer,elem.GetType() != typeof(FunctionElement));
                             elements.Add(elem);
                         }
 

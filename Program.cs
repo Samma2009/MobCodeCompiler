@@ -77,7 +77,7 @@ namespace MobCode
             FileTree.s.Add(entry);
             foreach (var item in eltree)
             {
-                if (item.Type != "NamespaceElement")
+                if (item.GetType() != typeof(NamespaceElement))
                 {
                     Console.BackgroundColor = ConsoleColor.Red;
                     Console.ForegroundColor = ConsoleColor.Black;
@@ -145,7 +145,7 @@ namespace MobCode
         {
             if (entry.GetType() == typeof(DirEntry))
             {
-                Directory.CreateDirectory(composedpath + entry.name + "/");
+                //Directory.CreateDirectory(composedpath + entry.name + "/");
                 foreach (var item in ((DirEntry)entry).data)
                 {
                     FDNavigate(item, composedpath + entry.name + "/");
@@ -155,17 +155,20 @@ namespace MobCode
             {
                 if (entry.modifiers.Contains("@load"))
                 {
-                    var p = ReplaceFirst(composedpath.Replace(@"data/", ""),'/',':').Replace(":function/",":");
+                    var p = ReplaceFirst(composedpath.Replace(@"data/", ""),'/',':').Replace(":${SubesetTemplate}$/",":");
                     Directory.CreateDirectory("data/minecraft/tags/function");
                     File.WriteAllText(@"data/minecraft/tags/function/load.json",$"{{\"values\": [\"{p+ entry.name}\"]}}");
                 }
                 if (entry.modifiers.Contains("@tick"))
                 {
-                    var p = ReplaceFirst(composedpath.Replace(@"data/", ""),'/',':').Replace(":function/",":");
+                    var p = ReplaceFirst(composedpath.Replace(@"data/", ""),'/',':').Replace(":${SubesetTemplate}$/",":");
                     Directory.CreateDirectory("data/minecraft/tags/function");
                     File.WriteAllText(@"data/minecraft/tags/function/tick.json",$"{{\"values\": [\"{p+ entry.name}\"]}}");
                 }
-                File.WriteAllText(composedpath + entry.name + (entry as FileEntry)!.extension, ((FileEntry)entry).data);
+
+                var fixedpath = composedpath.Replace("${SubesetTemplate}$",(entry as FileEntry)!.GenerationSubset);
+                if (!Directory.Exists(fixedpath)) Directory.CreateDirectory(fixedpath);
+                File.WriteAllText(fixedpath + entry.name + (entry as FileEntry)!.extension, ((FileEntry)entry).data);
             }
         }
 

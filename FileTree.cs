@@ -26,5 +26,6 @@ namespace MobCode
     {
         public string data;
         public string extension;
+        public string GenerationSubset;
     }
 }

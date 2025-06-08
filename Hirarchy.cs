@@ -10,13 +10,11 @@ namespace MobCode
 {
     public abstract class HirarchyElemet
     {
-        public string Type;
         public string[] Modifiers;
         public List<HirarchyElemet> Children;
 
         public HirarchyElemet()
         {
-            Type = this.GetType().Name;
             Modifiers = [];
             Children = new List<HirarchyElemet>();
         }
@@ -36,7 +34,7 @@ namespace MobCode
             if (entry.GetType() != typeof(DirEntry)) return;
 
             var d = new DirEntry();
-            d.name = Name.ToLower().Replace(" ","")+"/function";
+            d.name = Name.ToLower().Replace(" ","")+"/${SubesetTemplate}$";
 
             ((DirEntry)entry).data.Add(d);
 
@@ -83,6 +81,7 @@ namespace MobCode
             d.name = Name.ToLower().Replace(" ", "");
             d.extension = ".mcfunction";
             d.modifiers = Modifiers;
+            d.GenerationSubset = "function";
 
             ((DirEntry)entry).data.Add(d);
 
@@ -92,6 +91,31 @@ namespace MobCode
             {
                 item.Generate(d);
             }
+        }
+    }
+    public class JsonElement : HirarchyElemet
+    {
+        string Name;
+        string Content;
+        string EType;
+        public JsonElement(string name, string content, string type) : base()
+        {
+            Name = name;
+            Content = content;
+            EType = type;
+        }
+        public override void Generate(FTEntry entry)
+        {
+            if (entry.GetType() != typeof(DirEntry)) return;
+
+            var d = new FileEntry();
+            d.name = Name.ToLower().Replace(" ", "");
+            d.extension = ".json";
+            d.modifiers = Modifiers;
+            d.GenerationSubset = EType;
+
+            ((DirEntry)entry).data.Add(d);
+            d.data = Content;
         }
     }
     public class IfElement : HirarchyElemet
