@@ -247,7 +247,7 @@ namespace MobCode
             {
                 foreach (var property in obj.Properties())
                 {
-                    var path = string.IsNullOrEmpty(currentPath) ? property.Name : $"{currentPath}.{property.Name}";
+                    var path = string.IsNullOrEmpty(currentPath) ? "."+property.Name : $"{currentPath}.{property.Name}";
                     paths.AddRange(ExtractJsonPaths(property.Value, path));
                 }
             }
@@ -306,7 +306,7 @@ namespace MobCode
 
                         foreach (var path in paths)
                         {
-                            var fullVarName = $"{varName}.{path}";
+                            var fullVarName = varName+path;
                             var tokenValue = token.SelectToken(path);
                             if (tokenValue != null)
                             {
