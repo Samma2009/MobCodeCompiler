@@ -1,5 +1,5 @@
 {
     "evaluator":"Out.Tellraw",
     "arguments": ["selector","text"],
-    "result": "tellraw %selector% %text%"
+    "result": "tellraw %selector% \"%text%\""
 }

@@ -54,6 +54,12 @@ namespace MobCode
                             case "times":
                                 elem = new RepeatElement(name.Trim());
                                 break;
+                            case "switch":
+                                elem = new SwitchElement(name.Trim());
+                                break;
+                            case "case":
+                                elem = new CaseElement(name.Trim());
+                                break;
                             default:
                                 if (parsejsongens)
                                     elem = new JsonElement(name.Trim(),"{" + buffer + "}",kw.Trim());

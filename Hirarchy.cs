@@ -172,6 +172,62 @@ namespace MobCode
             catch (Exception) { }
         }
     }
+    public class SwitchElement : HirarchyElemet
+    {
+        string Name;
+        public SwitchElement(string name) : base()
+        {
+            Name = name;
+        }
+        public override void Generate(FTEntry entry)
+        {
+
+            foreach (var item in CommandElement.ComTimeVariables)
+            {
+                Name = Name.Replace(item.Key, item.Value);
+            }
+
+            foreach (var item in Children)
+            {
+                if (item.GetType() != typeof(CaseElement))
+                {
+                        Console.BackgroundColor = ConsoleColor.Red;
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        Console.Write("Error:");
+                        Console.ResetColor();
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine(" only case elements are allowed in switches");
+                        Console.ResetColor();
+                    continue;
+                }
+                    
+                try
+                {
+                    if (bool.Parse(new Expression(Name + " == " + (item as CaseElement)!.Name).Evaluate()!.ToString()!))
+                    {
+                        item.Generate(entry);
+                    }
+                }
+                catch (Exception)
+                { }
+            }
+        }
+    }
+    public class CaseElement : HirarchyElemet
+    {
+        public string Name;
+        public CaseElement(string name) : base()
+        {
+            Name = name;
+        }
+        public override void Generate(FTEntry entry)
+        {
+            foreach (var item in Children)
+            {
+                item.Generate(entry);
+            }
+        }
+    }
     public class WhileElement : HirarchyElemet
     {
         string Name;
