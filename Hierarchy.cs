@@ -8,27 +8,25 @@ using Newtonsoft.Json.Linq;
 
 namespace MobCode
 {
-    public abstract class HirarchyElemet
+    public abstract class HierarchyElement
     {
+        public string Name { get; internal set; } = "";
         public string[] Modifiers;
-        public List<HirarchyElemet> Children;
+        public List<HierarchyElement> Children;
 
-        public HirarchyElemet()
+        public HierarchyElement(string name)
         {
             Modifiers = [];
-            Children = new List<HirarchyElemet>();
+            Children = new List<HierarchyElement>();
+            Name = name;
         }
 
         public abstract void Generate(FTEntry entry);
     }
 
-    public class NamespaceElement : HirarchyElemet
+    public class NamespaceElement : HierarchyElement
     {
-        string Name;
-        public NamespaceElement(string name) : base()
-        {
-            Name = name;
-        }
+        public NamespaceElement(string name) : base(name) {}
         public override void Generate(FTEntry entry)
         {
             if (entry.GetType() != typeof(DirEntry)) return;
@@ -44,13 +42,9 @@ namespace MobCode
             }
         }
     }
-    public class ClassElement : HirarchyElemet
+    public class ClassElement : HierarchyElement
     {
-        string Name;
-        public ClassElement(string name) : base()
-        {
-            Name = name;
-        }
+        public ClassElement(string name) : base(name) {}
         public override void Generate(FTEntry entry)
         {
             if (entry.GetType() != typeof(DirEntry)) return;
@@ -66,13 +60,9 @@ namespace MobCode
             }
         }
     }
-    public class FunctionElement : HirarchyElemet
+    public class FunctionElement : HierarchyElement
     {
-        string Name;
-        public FunctionElement(string name) : base()
-        {
-            Name = name;
-        }
+        public FunctionElement(string name) : base(name) {}
         public override void Generate(FTEntry entry)
         {
             if (entry.GetType() != typeof(DirEntry)) return;
@@ -81,7 +71,7 @@ namespace MobCode
             d.name = Name.ToLower().Replace(" ", "");
             d.extension = ".mcfunction";
             d.modifiers = Modifiers;
-            d.GenerationSubset = "function";
+            d.GenerationSubSet = "function";
 
             ((DirEntry)entry).data.Add(d);
 
@@ -93,14 +83,12 @@ namespace MobCode
             }
         }
     }
-    public class JsonElement : HirarchyElemet
+    public class JsonElement : HierarchyElement
     {
-        string Name;
         string Content;
         string EType;
-        public JsonElement(string name, string content, string type) : base()
+        public JsonElement(string name, string content, string type) : base(name)
         {
-            Name = name;
             Content = content;
             EType = type;
         }
@@ -112,20 +100,15 @@ namespace MobCode
             d.name = Name.ToLower().Replace(" ", "");
             d.extension = ".json";
             d.modifiers = Modifiers;
-            d.GenerationSubset = EType;
+            d.GenerationSubSet = EType;
 
             ((DirEntry)entry).data.Add(d);
             d.data = Content;
         }
     }
-    public class IfElement : HirarchyElemet
+    public class IfElement : HierarchyElement
     {
-        string Name;
-        public IfElement(string name) : base()
-        {
-            Name = name;
-        }
-        public override void Generate(FTEntry entry)
+        public IfElement(string name) : base(name) {}        public override void Generate(FTEntry entry)
         {
             foreach (var item in CommandElement.ComTimeVariables)
             {
@@ -143,13 +126,11 @@ namespace MobCode
             catch (Exception) { }
         }
     }
-    public class RepeatElement : HirarchyElemet
+    public class RepeatElement : HierarchyElement
     {
-        string Name;
-        public RepeatElement(string name) : base()
-        {
-            Name = name;
-        }
+        const int MaxIter = 50000;
+        
+        public RepeatElement(string name) : base(name) { }
         public override void Generate(FTEntry entry)
         {
 
@@ -161,7 +142,7 @@ namespace MobCode
             try
             {
                 int iter = int.Parse(new Expression(Name).Evaluate()!.ToString()!);
-                for (int i = 0; i < iter; i++)
+                for (int i = 0; i < Math.Min(iter,MaxIter); i++)
                 {
                     foreach (var item in Children)
                     {
@@ -172,13 +153,9 @@ namespace MobCode
             catch (Exception) { }
         }
     }
-    public class SwitchElement : HirarchyElemet
+    public class SwitchElement : HierarchyElement
     {
-        string Name;
-        public SwitchElement(string name) : base()
-        {
-            Name = name;
-        }
+        public SwitchElement(string name) : base(name) {}
         public override void Generate(FTEntry entry)
         {
 
@@ -213,13 +190,9 @@ namespace MobCode
             }
         }
     }
-    public class CaseElement : HirarchyElemet
+    public class CaseElement : HierarchyElement
     {
-        public string Name;
-        public CaseElement(string name) : base()
-        {
-            Name = name;
-        }
+        public CaseElement(string name) : base(name) {}
         public override void Generate(FTEntry entry)
         {
             foreach (var item in Children)
@@ -228,13 +201,11 @@ namespace MobCode
             }
         }
     }
-    public class WhileElement : HirarchyElemet
+    public class WhileElement : HierarchyElement
     {
-        string Name;
-        public WhileElement(string name) : base()
-        {
-            Name = name;
-        }
+        const int MaxIter = 50000;
+
+        public WhileElement(string name) : base(name) { }
         public override void Generate(FTEntry entry)
         {
             try
@@ -247,7 +218,7 @@ namespace MobCode
                 }
                 while (bool.Parse(new Expression(n).Evaluate()!.ToString()!))
                 {
-                    if (breakout >= 50000)
+                    if (breakout >= MaxIter)
                     {
                         Console.BackgroundColor = ConsoleColor.Red;
                         Console.ForegroundColor = ConsoleColor.Black;
@@ -273,11 +244,11 @@ namespace MobCode
             catch (Exception) { }
         }
     }
-    public class CommandElement : HirarchyElemet
+    public class CommandElement : HierarchyElement
     {
         public static Dictionary<string, string> ComTimeVariables = new();
         string Datad;
-        public CommandElement(string Data) : base()
+        public CommandElement(string Data) : base("")
         {
             this.Datad = Data;
         }

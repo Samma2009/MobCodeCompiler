@@ -166,7 +166,7 @@ namespace MobCode
                     File.WriteAllText(@"data/minecraft/tags/function/tick.json",$"{{\"values\": [\"{p+ entry.name}\"]}}");
                 }
 
-                var fixedpath = composedpath.Replace("${SubesetTemplate}$",(entry as FileEntry)!.GenerationSubset);
+                var fixedpath = composedpath.Replace("${SubesetTemplate}$",(entry as FileEntry)!.GenerationSubSet);
                 if (!Directory.Exists(fixedpath)) Directory.CreateDirectory(fixedpath);
                 File.WriteAllText(fixedpath + entry.name + (entry as FileEntry)!.extension, ((FileEntry)entry).data);
             }

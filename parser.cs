@@ -8,9 +8,9 @@ namespace MobCode
 {
     public static class Parser
     {
-        public static List<HirarchyElemet> Parse(string input,bool parsejsongens = true) 
+        public static List<HierarchyElement> Parse(string input,bool parsejsongens = true) 
         {
-            List<HirarchyElemet> elements = new List<HirarchyElemet>();
+            List<HierarchyElement> elements = new List<HierarchyElement>();
 
             int depth = 0;
             List<string> modifiers = new() {};
@@ -33,7 +33,7 @@ namespace MobCode
 
                     if (depth == 0)
                     {
-                        HirarchyElemet elem = null!;
+                        HierarchyElement elem = null!;
                         switch (kw.Trim())
                         {
                             case "namespace":

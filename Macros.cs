@@ -10,7 +10,7 @@ namespace MobCode
 
         public static void LoadMacros()
         {
-            string dir = Path.Combine(AppContext.BaseDirectory, "ComplierMacros");
+            string dir = Path.Combine(AppContext.BaseDirectory, "CompilerMacros");
             if (!Directory.Exists(dir)) return;
 
             foreach (var item in Directory.GetFiles(dir, "*.json", SearchOption.AllDirectories))

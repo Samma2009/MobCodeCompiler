@@ -13,7 +13,7 @@ namespace MobCode
 
     public abstract class FTEntry
     {
-        public string name;
+        public string name { get; set; } = "";
         public string[] modifiers = [];
     }
 
@@ -24,8 +24,8 @@ namespace MobCode
 
     public class FileEntry : FTEntry
     {
-        public string data;
-        public string extension;
-        public string GenerationSubset;
+        public string data              { get; set; } = "";
+        public string extension         { get; set; } = "";
+        public string GenerationSubSet  { get; set; } = "";
     }
 }
