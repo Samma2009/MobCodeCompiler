@@ -14,7 +14,9 @@ namespace MobCode
     public abstract class FTEntry
     {
         public string name { get; set; } = "";
+        public string processorName { get; set; } = "";
         public string[] modifiers = [];
+        public FTEntry parent = null!;
     }
 
     public class DirEntry : FTEntry

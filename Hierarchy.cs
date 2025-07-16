@@ -14,6 +14,8 @@ namespace MobCode
         public string[] Modifiers;
         public List<HierarchyElement> Children;
 
+        public HierarchyElement parent = null!;
+
         public HierarchyElement(string name)
         {
             Modifiers = [];
@@ -33,6 +35,8 @@ namespace MobCode
 
             var d = new DirEntry();
             d.name = Name.ToLower().Replace(" ","")+"/${SubesetTemplate}$";
+            d.processorName = Name;
+            d.parent = entry;
 
             ((DirEntry)entry).data.Add(d);
 
@@ -51,6 +55,8 @@ namespace MobCode
 
             var d = new DirEntry();
             d.name = Name.ToLower().Replace(" ", "");
+            d.processorName = Name;
+            d.parent = entry;
 
             ((DirEntry)entry).data.Add(d);
 
@@ -69,13 +75,41 @@ namespace MobCode
 
             var d = new FileEntry();
             d.name = Name.ToLower().Replace(" ", "");
+            d.processorName = Name;
             d.extension = ".mcfunction";
             d.modifiers = Modifiers;
             d.GenerationSubSet = "function";
+            d.parent = entry;
 
             ((DirEntry)entry).data.Add(d);
 
             CommandElement.ComTimeVariables.Clear();
+
+            List<string> FunctionTraversal = new();
+            string FunctionDomain = "";
+
+            
+            void DomainGenerate(FTEntry p)
+            {
+                FunctionTraversal.Add(p.processorName);
+                if (p.parent != null && p.parent.processorName.Length > 0) DomainGenerate(p.parent);
+            }
+            
+            DomainGenerate(d);
+
+            FunctionTraversal.Reverse();
+            FunctionDomain = string.Join('.',FunctionTraversal);
+            var Namespace = FunctionDomain.Substring(0,FunctionDomain.IndexOf('.')+1).Replace('.',':');
+            FunctionDomain = Namespace + FunctionDomain.Substring(FunctionDomain.IndexOf('.') + 1);
+
+            string FunctionIdentifier = FunctionDomain.Replace('.','/');
+
+            Macros.MacroList[FunctionDomain] = new()
+            {
+                evaluator = FunctionDomain,
+                arguments = [],
+                result    = "function " + FunctionIdentifier
+            };
 
             foreach (var item in Children)
             {
@@ -108,7 +142,8 @@ namespace MobCode
     }
     public class IfElement : HierarchyElement
     {
-        public IfElement(string name) : base(name) {}        public override void Generate(FTEntry entry)
+        public IfElement(string name) : base(name) {}
+        public override void Generate(FTEntry entry)
         {
             foreach (var item in CommandElement.ComTimeVariables)
             {
@@ -351,8 +386,8 @@ namespace MobCode
                     return;
                 }
             }
-
-            fe.data += Macros.EvaluateMacro(Data) + "\n";
+            
+            fe.data += Data + "\n";
         }
     }
 }

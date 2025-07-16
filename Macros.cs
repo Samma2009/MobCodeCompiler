@@ -45,7 +45,7 @@ namespace MobCode
                 }
 
                 int startName = openParen - 1;
-                while (startName >= pos && (char.IsLetterOrDigit(input[startName]) || input[startName] == '.' || input[startName] == '_'))
+                while (startName >= pos && (char.IsLetterOrDigit(input[startName]) || input[startName] == '.'|| input[startName] == ':' || input[startName] == '_'))
                     startName--;
                 startName++;
 

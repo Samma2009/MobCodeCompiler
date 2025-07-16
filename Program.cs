@@ -168,7 +168,15 @@ namespace MobCode
 
                 var fixedpath = composedpath.Replace("${SubesetTemplate}$",(entry as FileEntry)!.GenerationSubSet);
                 if (!Directory.Exists(fixedpath)) Directory.CreateDirectory(fixedpath);
-                File.WriteAllText(fixedpath + entry.name + (entry as FileEntry)!.extension, ((FileEntry)entry).data);
+
+                var processed = "";
+                foreach (var item in ((FileEntry)entry).data.Split('\n'))
+                {
+
+                    processed += Macros.EvaluateMacro(item)+"\n";
+                }
+
+                File.WriteAllText(fixedpath + entry.name + (entry as FileEntry)!.extension, processed);
             }
         }
 

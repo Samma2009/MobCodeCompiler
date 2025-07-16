@@ -72,6 +72,8 @@ namespace MobCode
                             elem.Modifiers = modifiers.ToArray();
                             if(elem.GetType() != typeof(JsonElement))
                                 elem.Children = Parse(buffer,elem.GetType() != typeof(FunctionElement));
+                            foreach (var child in elem.Children)
+                                child.parent = elem;
                             elements.Add(elem);
                         }
 
